@@ -78,14 +78,22 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AThe_ShooterCharacter::StopJump);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AThe_ShooterCharacter::Move);
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AThe_ShooterCharacter::Look);
+
+		// Sprinting
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::StartSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AThe_ShooterCharacter::StopSprint);
+
+		//Crouch
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::Crouch);
+
 	}
 	else
 	{
@@ -126,5 +134,48 @@ void AThe_ShooterCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AThe_ShooterCharacter::Jump(const FInputActionValue& Value)
+{
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		bisJump = true;
+		ACharacter::Jump();
+	}
+}
+
+void AThe_ShooterCharacter::StopJump(const FInputActionValue& Value)
+{
+	bisJump = false;
+	ACharacter::StopJumping();
+}
+
+void AThe_ShooterCharacter::StartSprint(const FInputActionValue& Value)
+{
+	bisSprint = true;
+	GetCharacterMovement()->MaxWalkSpeed = 1000.f;
+	/*if (!bisCrouch && !bisAim)
+	{
+		
+	}*/
+}
+
+void AThe_ShooterCharacter::StopSprint(const FInputActionValue& Value)
+{
+	bisSprint = false;
+	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+}
+
+void AThe_ShooterCharacter::Crouch(const FInputActionValue& Value)
+{
+	if (bisCrouch)
+	{
+		bisCrouch = false;
+	}
+	else
+	{
+		bisCrouch = true;
 	}
 }

@@ -44,6 +44,36 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** Sprint Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SprintAction;
+
+	/** Crouch Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CrouchAction;
+
+	/*Valiables*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
+	bool bisCrouch;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
+	bool bisSprint;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
+	bool bisAim;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
+	bool bisJump;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
+	bool bWeaponEquip;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
+	bool bPistolEquip;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
+	bool bRifleEquip;
+
 public:
 	AThe_ShooterCharacter();
 	
@@ -55,8 +85,18 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
 
+	/** Called for Jump input */
+	void Jump(const FInputActionValue& Value);
+	void StopJump(const FInputActionValue& Value);
+
+	/** Called for Sprint input */
+	void StartSprint(const FInputActionValue& Value);
+	void StopSprint(const FInputActionValue& Value);
+
+	/** Called for Crouch input */
+	void Crouch(const FInputActionValue& Value);
+	
 protected:
 
 	virtual void NotifyControllerChanged() override;
