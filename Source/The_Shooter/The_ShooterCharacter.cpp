@@ -35,7 +35,7 @@ AThe_ShooterCharacter::AThe_ShooterCharacter()
 	// instead of recompiling to adjust them
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
@@ -88,7 +88,7 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AThe_ShooterCharacter::Look);
 
 		// Sprinting
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::StartSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AThe_ShooterCharacter::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AThe_ShooterCharacter::StopSprint);
 
 		//Crouch
@@ -154,28 +154,32 @@ void AThe_ShooterCharacter::StopJump(const FInputActionValue& Value)
 
 void AThe_ShooterCharacter::StartSprint(const FInputActionValue& Value)
 {
-	bisSprint = true;
-	GetCharacterMovement()->MaxWalkSpeed = 1000.f;
-	/*if (!bisCrouch && !bisAim)
+	if (!bisCrouch)
 	{
-		
-	}*/
+		bisSprint = true;
+		GetCharacterMovement()->MaxWalkSpeed = 600.f;
+	}
 }
 
 void AThe_ShooterCharacter::StopSprint(const FInputActionValue& Value)
 {
 	bisSprint = false;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 }
 
 void AThe_ShooterCharacter::Crouch(const FInputActionValue& Value)
 {
-	if (bisCrouch)
+	if (!GetCharacterMovement()->IsFalling())
 	{
-		bisCrouch = false;
-	}
-	else
-	{
-		bisCrouch = true;
+		if (!bisCrouch)
+		{
+			bisCrouch = true;
+			CameraBoom->TargetArmLength = 300.0f;
+		}
+		else
+		{
+			bisCrouch = false;
+			CameraBoom->TargetArmLength = 400.0f;
+		}
 	}
 }
