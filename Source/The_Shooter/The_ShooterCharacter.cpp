@@ -94,6 +94,12 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		//Crouch
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::Crouch);
 
+		// Pistol Equip
+		EnhancedInputComponent->BindAction(PistolAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::PistolEquip);
+
+		// Rifle Equip
+		EnhancedInputComponent->BindAction(RifleAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::RifleEquip);
+
 	}
 	else
 	{
@@ -139,7 +145,7 @@ void AThe_ShooterCharacter::Look(const FInputActionValue& Value)
 
 void AThe_ShooterCharacter::Jump(const FInputActionValue& Value)
 {
-	if (!GetCharacterMovement()->IsFalling())
+	if (!bisCrouch)
 	{
 		bisJump = true;
 		ACharacter::Jump();
@@ -181,5 +187,43 @@ void AThe_ShooterCharacter::Crouch(const FInputActionValue& Value)
 			bisCrouch = false;
 			CameraBoom->TargetArmLength = 400.0f;
 		}
+	}
+}
+
+void AThe_ShooterCharacter::PistolEquip(const FInputActionValue& Value)
+{
+	if (bWeaponEquip)
+	{
+		if (bPistolEquip)
+		{
+			PlayAnimMontage(PistolUnEquipMontage);
+			bWeaponEquip = false;
+			bPistolEquip = false;
+		}
+	}
+	else
+	{
+		PlayAnimMontage(PistolEquipMontage);
+		bWeaponEquip = true;
+		bPistolEquip = true;
+	}
+}
+
+void AThe_ShooterCharacter::RifleEquip(const FInputActionValue& Value)
+{
+	if (bWeaponEquip)
+	{
+		if (bRifleEquip)
+		{
+			PlayAnimMontage(RifleUnEquipMontage);
+			bWeaponEquip = false;
+			bRifleEquip = false;
+		}
+	}
+	else
+	{
+		PlayAnimMontage(RifleEquipMontage);
+		bWeaponEquip = true;
+		bRifleEquip = true;
 	}
 }
