@@ -43,7 +43,7 @@ AThe_ShooterCharacter::AThe_ShooterCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
+	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
@@ -57,6 +57,8 @@ AThe_ShooterCharacter::AThe_ShooterCharacter()
 
 //////////////////////////////////////////////////////////////////////////
 // Input
+
+
 
 void AThe_ShooterCharacter::NotifyControllerChanged()
 {
@@ -106,6 +108,7 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
+
 
 void AThe_ShooterCharacter::Move(const FInputActionValue& Value)
 {
@@ -180,12 +183,15 @@ void AThe_ShooterCharacter::Crouch(const FInputActionValue& Value)
 		if (!bisCrouch)
 		{
 			bisCrouch = true;
-			CameraBoom->TargetArmLength = 300.0f;
+			
+			//CameraBoom->TargetArmLength = FMath::FInterpTo(400.0f, 300.0f, Delta, 5.0f);
+			CameraBoom->TargetArmLength = 250.0f;
 		}
 		else
 		{
 			bisCrouch = false;
-			CameraBoom->TargetArmLength = 400.0f;
+			//CameraBoom->TargetArmLength = FMath::FInterpTo(300.0f, 400.0f, Delta, 5.0f);
+			CameraBoom->TargetArmLength = 300.0f;
 		}
 	}
 }
@@ -197,15 +203,63 @@ void AThe_ShooterCharacter::PistolEquip(const FInputActionValue& Value)
 		if (bPistolEquip)
 		{
 			PlayAnimMontage(PistolUnEquipMontage);
+
+			// Destrying the Pistol
+			PistolRefrence->Destroy();
+
 			bWeaponEquip = false;
 			bPistolEquip = false;
+		}
+		else
+		{
+			PlayAnimMontage(RifleUnEquipMontage);
+			RifleRefrence->Destroy();
+			bRifleEquip = false;
+
+			PlayAnimMontage(PistolEquipMontage);
+			AThe_ShooterCharacter::SpawnPistol();
+			bPistolEquip = true;
+
 		}
 	}
 	else
 	{
+
+		AThe_ShooterCharacter::SpawnPistol();
+
 		PlayAnimMontage(PistolEquipMontage);
 		bWeaponEquip = true;
 		bPistolEquip = true;
+	}
+}
+
+void AThe_ShooterCharacter::SpawnPistol()
+{
+	if (!PistolBlueprint) return;
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	// Setting up the transform
+	FVector SpawnLocation(0.f, 0.f, 0.f);
+	FRotator SpawnRotation(0.f, 0.f, 0.f);
+	FTransform SpawnTransform(SpawnRotation, SpawnLocation, FVector(1.f, 1.f, 1.f));
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	// Spawning the Pistol in the scene
+	AActor* SpawnedPistol = World->SpawnActor<AActor>(PistolBlueprint, SpawnTransform, SpawnParams);
+
+	PistolRefrence = SpawnedPistol;
+
+	// if the pistol is spawned...
+	if (SpawnedPistol)
+	{
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+
+		//... Attaching it to the component
+		SpawnedPistol->AttachToComponent(GetMesh(), AttachmentRules, TEXT("Pistol_Socket"));
 	}
 }
 
@@ -216,14 +270,60 @@ void AThe_ShooterCharacter::RifleEquip(const FInputActionValue& Value)
 		if (bRifleEquip)
 		{
 			PlayAnimMontage(RifleUnEquipMontage);
+
+			// Destroy the Rifle
+			RifleRefrence->Destroy();
+
 			bWeaponEquip = false;
 			bRifleEquip = false;
+		}
+		else
+		{
+			PlayAnimMontage(PistolUnEquipMontage);
+			PistolRefrence->Destroy();
+			bPistolEquip = false;
+
+			PlayAnimMontage(RifleEquipMontage);
+			AThe_ShooterCharacter::SpawnRifle();
+			bRifleEquip = true;
 		}
 	}
 	else
 	{
+		AThe_ShooterCharacter::SpawnRifle();
+
 		PlayAnimMontage(RifleEquipMontage);
 		bWeaponEquip = true;
 		bRifleEquip = true;
+	}
+}
+
+void AThe_ShooterCharacter::SpawnRifle()
+{
+	if (!RifleBlueprint) return;
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	// Setting up the transform
+	FVector SpawnLocation(0.f,0.f,0.f);
+	FRotator SpawnRotation(0.f, 0.f, 0.f);
+	FTransform SpawnTransform(SpawnRotation, SpawnLocation, FVector(1.f, 1.f, 1.f));
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	// Spawning the Rifle in the scene
+	AActor* SpawnedRifle = World->SpawnActor<AActor>(RifleBlueprint, SpawnTransform, SpawnParams);
+
+	RifleRefrence = SpawnedRifle;
+
+	// if the Rifle is spawned...
+	if (SpawnedRifle)
+	{
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+
+		//... Attaching it to the component
+		SpawnedRifle->AttachToComponent(GetMesh(), AttachmentRules, TEXT("Rifle_Socket"));
 	}
 }

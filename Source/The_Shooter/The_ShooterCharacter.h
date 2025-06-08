@@ -13,6 +13,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class UAnimMontage;
+class AActor;
 struct FInputActionValue;
 
 
@@ -99,9 +100,19 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* RifleUnEquipMontage;
 
+	/* Weapon Blueprints */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Blueprints, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> PistolBlueprint;
+	AActor* PistolRefrence;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Blueprints, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> RifleBlueprint;
+	AActor* RifleRefrence;
+
 public:
 	AThe_ShooterCharacter();
 	
+	float Delta;
 
 protected:
 
@@ -130,11 +141,16 @@ protected:
 	
 protected:
 
+	//Spawn Weapon Function
+	void SpawnPistol();
+	void SpawnRifle();
+
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
