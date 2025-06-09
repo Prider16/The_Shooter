@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Animation/AnimMontage.h"
+#include "Public/WeaponBase.h"
 #include "The_ShooterCharacter.generated.h"
 
 class USpringArmComponent;
@@ -101,13 +102,13 @@ class AThe_ShooterCharacter : public ACharacter
 	UAnimMontage* RifleUnEquipMontage;
 
 	/* Weapon Blueprints */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Blueprints, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor> PistolBlueprint;
-	AActor* PistolRefrence;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapons, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AWeaponBase> PistolBlueprint;
+	AWeaponBase* PistolRefrence;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Blueprints, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor> RifleBlueprint;
-	AActor* RifleRefrence;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapons, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AWeaponBase> RifleBlueprint;
+	AWeaponBase* RifleRefrence;
 
 public:
 	AThe_ShooterCharacter();

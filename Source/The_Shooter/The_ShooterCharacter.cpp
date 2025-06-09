@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Public/WeaponBase.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -249,7 +250,7 @@ void AThe_ShooterCharacter::SpawnPistol()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	// Spawning the Pistol in the scene
-	AActor* SpawnedPistol = World->SpawnActor<AActor>(PistolBlueprint, SpawnTransform, SpawnParams);
+	AWeaponBase* SpawnedPistol = World->SpawnActor<AWeaponBase>(PistolBlueprint, SpawnTransform, SpawnParams);
 
 	PistolRefrence = SpawnedPistol;
 
@@ -314,7 +315,7 @@ void AThe_ShooterCharacter::SpawnRifle()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	// Spawning the Rifle in the scene
-	AActor* SpawnedRifle = World->SpawnActor<AActor>(RifleBlueprint, SpawnTransform, SpawnParams);
+	AWeaponBase* SpawnedRifle = World->SpawnActor<AWeaponBase>(RifleBlueprint, SpawnTransform, SpawnParams);
 
 	RifleRefrence = SpawnedRifle;
 
