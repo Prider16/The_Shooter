@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Components/TimelineComponent.h"
 #include "Public/WeaponBase.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -44,7 +45,8 @@ AThe_ShooterCharacter::AThe_ShooterCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
+	CameraBoom->TargetArmLength = 250.0f; // The camera follows at this distance behind the character	
+	CameraBoom->SocketOffset = FVector(0.0f, 80.f, 40.f);
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
@@ -103,6 +105,10 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		// Rifle Equip
 		EnhancedInputComponent->BindAction(RifleAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::RifleEquip);
 
+		// Aiming
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::AimStart);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AThe_ShooterCharacter::AimStop);
+
 	}
 	else
 	{
@@ -110,6 +116,62 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	}
 }
 
+void AThe_ShooterCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Setting Up Crouch TimeLine
+	if (CrouchCurve)
+	{
+		FOnTimelineFloat TimelineCallBack;
+		TimelineCallBack.BindUFunction(this, FName("UpdateCameraBoom"));
+		CrouchTimeline.AddInterpFloat(CrouchCurve, TimelineCallBack);
+		CrouchTimeline.SetLooping(false);
+		CrouchTimeline.SetPlayRate(2.0f);
+	}
+
+	// Setting up Aim TimeLine
+	// Normal Aim
+	if (AimingCurveNormal)
+	{
+		FOnTimelineFloat TimelineCallBack;
+		TimelineCallBack.BindUFunction(this, FName("UpdateCameraBoom"));
+		AimNormalTimeline.AddInterpFloat(AimingCurveNormal, TimelineCallBack);
+		AimNormalTimeline.SetLooping(false);
+		AimNormalTimeline.SetPlayRate(2.0f);
+	}
+	if (AimingCurveCrouched)
+	{
+		FOnTimelineFloat TimelineCallBack;
+		TimelineCallBack.BindUFunction(this, FName("UpdateCameraBoom"));
+		AimCrouchTimeline.AddInterpFloat(AimingCurveCrouched, TimelineCallBack);
+		AimCrouchTimeline.SetLooping(false);
+		AimCrouchTimeline.SetPlayRate(2.0f);
+	}
+	if (AimingViewCurve)
+	{
+		FOnTimelineFloat TimelineCallBack;
+		TimelineCallBack.BindUFunction(this, FName("UpdateCameraView"));
+		AimViewTimeline.AddInterpFloat(AimingViewCurve, TimelineCallBack);
+		AimViewTimeline.SetLooping(false);
+		AimViewTimeline.SetPlayRate(2.0f);
+	}
+
+}
+
+void AThe_ShooterCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	// Tick Crouch Timeline
+	CrouchTimeline.TickTimeline(DeltaTime);
+	
+	// Tick Aim Timeline
+	AimNormalTimeline.TickTimeline(DeltaTime);
+	AimCrouchTimeline.TickTimeline(DeltaTime);
+	AimViewTimeline.TickTimeline(DeltaTime);
+
+}
 
 void AThe_ShooterCharacter::Move(const FInputActionValue& Value)
 {
@@ -164,7 +226,12 @@ void AThe_ShooterCharacter::StopJump(const FInputActionValue& Value)
 
 void AThe_ShooterCharacter::StartSprint(const FInputActionValue& Value)
 {
-	if (!bisCrouch)
+	if (bisCrouch || bisAim)
+	{
+		bisSprint = false;
+		GetCharacterMovement()->MaxWalkSpeed = 300.f;
+	}
+	else
 	{
 		bisSprint = true;
 		GetCharacterMovement()->MaxWalkSpeed = 600.f;
@@ -177,22 +244,30 @@ void AThe_ShooterCharacter::StopSprint(const FInputActionValue& Value)
 	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 }
 
+void AThe_ShooterCharacter::UpdateCameraBoom(float Length)
+{
+	CameraBoom->TargetArmLength = Length;
+}
+
+void AThe_ShooterCharacter::UpdateCameraView(float View)
+{
+	FollowCamera->FieldOfView = View;
+}
+
 void AThe_ShooterCharacter::Crouch(const FInputActionValue& Value)
 {
 	if (!GetCharacterMovement()->IsFalling())
 	{
+
+		bisCrouch = !bisCrouch;
+
 		if (!bisCrouch)
 		{
-			bisCrouch = true;
-			
-			//CameraBoom->TargetArmLength = FMath::FInterpTo(400.0f, 300.0f, Delta, 5.0f);
-			CameraBoom->TargetArmLength = 250.0f;
+			CrouchTimeline.PlayFromStart();
 		}
 		else
 		{
-			bisCrouch = false;
-			//CameraBoom->TargetArmLength = FMath::FInterpTo(300.0f, 400.0f, Delta, 5.0f);
-			CameraBoom->TargetArmLength = 300.0f;
+			CrouchTimeline.ReverseFromEnd();
 		}
 	}
 }
@@ -257,7 +332,7 @@ void AThe_ShooterCharacter::SpawnPistol()
 	// if the pistol is spawned...
 	if (SpawnedPistol)
 	{
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 
 		//... Attaching it to the component
 		SpawnedPistol->AttachToComponent(GetMesh(), AttachmentRules, TEXT("Pistol_Socket"));
@@ -322,9 +397,42 @@ void AThe_ShooterCharacter::SpawnRifle()
 	// if the Rifle is spawned...
 	if (SpawnedRifle)
 	{
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, true);
+		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 
 		//... Attaching it to the component
 		SpawnedRifle->AttachToComponent(GetMesh(), AttachmentRules, TEXT("Rifle_Socket"));
 	}
+}
+
+void AThe_ShooterCharacter::AimStart(const FInputActionValue& Value)
+{
+	bisAim = true;
+
+	if (bisCrouch)
+	{
+		AimCrouchTimeline.PlayFromStart();
+		AimViewTimeline.PlayFromStart();
+	}
+	else
+	{
+		AimNormalTimeline.PlayFromStart();
+		AimViewTimeline.PlayFromStart();
+	}
+}
+
+void AThe_ShooterCharacter::AimStop(const FInputActionValue& Value)
+{
+	bisAim = false;
+
+	if (bisCrouch)
+	{
+		AimCrouchTimeline.ReverseFromEnd();
+		AimViewTimeline.ReverseFromEnd();
+	}
+	else
+	{
+		AimNormalTimeline.ReverseFromEnd();
+		AimViewTimeline.ReverseFromEnd();
+	}
+	
 }

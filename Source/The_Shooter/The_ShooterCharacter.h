@@ -7,6 +7,7 @@
 #include "Logging/LogMacros.h"
 #include "Animation/AnimMontage.h"
 #include "Public/WeaponBase.h"
+#include "Components/TimelineComponent.h"
 #include "The_ShooterCharacter.generated.h"
 
 class USpringArmComponent;
@@ -15,6 +16,8 @@ class UInputMappingContext;
 class UInputAction;
 class UAnimMontage;
 class AActor;
+class UCurveFloat;
+class UTimelineComponent;
 struct FInputActionValue;
 
 
@@ -65,6 +68,10 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* RifleAction;
 
+	/** Aim Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AimAction;
+
 	/*Valiables*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
 	bool bisCrouch;
@@ -110,10 +117,32 @@ class AThe_ShooterCharacter : public ACharacter
 	TSubclassOf<AWeaponBase> RifleBlueprint;
 	AWeaponBase* RifleRefrence;
 
+	// Crouch TimeLine Curve
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* CrouchCurve;
+
+	// Aim TimeLine Curve
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* AimingCurveNormal;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* AimingCurveCrouched;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* AimingViewCurve;
+
+	
+
 public:
 	AThe_ShooterCharacter();
-	
-	float Delta;
+
+	// Crouch TimeLine
+	FTimeline CrouchTimeline;
+
+	// Aim TimeLine
+	FTimeline AimNormalTimeline;
+	FTimeline AimCrouchTimeline;
+	FTimeline AimViewTimeline;
 
 protected:
 
@@ -131,6 +160,13 @@ protected:
 	void StartSprint(const FInputActionValue& Value);
 	void StopSprint(const FInputActionValue& Value);
 
+	// CameraBoom Update Function
+	UFUNCTION()
+	void UpdateCameraBoom(float Length);
+
+	UFUNCTION()
+	void UpdateCameraView(float View);
+
 	/** Called for Crouch input */
 	void Crouch(const FInputActionValue& Value);
 
@@ -139,6 +175,10 @@ protected:
 
 	/** Called for Rifle Equip input */
 	void RifleEquip(const FInputActionValue& Value);
+
+	/* Called for Aim input */
+	void AimStart(const FInputActionValue& Value);
+	void AimStop(const FInputActionValue& Value);
 	
 protected:
 
@@ -150,7 +190,11 @@ protected:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void BeginPlay() override;
+
 public:
+
+	virtual void Tick(float DeltaTime) override;
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

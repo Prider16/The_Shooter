@@ -15,6 +15,26 @@ AWeaponBase::AWeaponBase()
 
 }
 
+void AWeaponBase::Pistol_Fire()
+{
+
+}
+
+void AWeaponBase::Pistol_Reload()
+{
+
+}
+
+void AWeaponBase::Rifle_Fire()
+{
+
+}
+
+void AWeaponBase::Rifle_Reload()
+{
+
+}
+
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {
