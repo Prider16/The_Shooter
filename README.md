@@ -28,15 +28,15 @@ And much more feature as the development continues.
 
 **Unarmed Locomotion**
 
-
+[Unarmed.webm](https://github.com/user-attachments/assets/387f9dea-a7f3-4169-9556-2de746218d68)
 
 **Pistol Locomotion**
 
-
+[Pistol.webm](https://github.com/user-attachments/assets/f7cc00a3-f128-4020-97d9-584030a87cc1)
 
 **Rifle Locomotion**
 
-
+[Rifle.webm](https://github.com/user-attachments/assets/bf8766ef-1749-461c-ad64-97cf5808af36)
 
 ### Shooting Mechanism
 
