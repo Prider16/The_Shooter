@@ -111,10 +111,12 @@ class AThe_ShooterCharacter : public ACharacter
 	/* Weapon Blueprints */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapons, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AWeaponBase> PistolBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapons, meta = (AllowPrivateAccess = "true"))
 	AWeaponBase* PistolRefrence;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapons, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AWeaponBase> RifleBlueprint;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapons, meta = (AllowPrivateAccess = "true"))
 	AWeaponBase* RifleRefrence;
 
 	// Crouch TimeLine Curve
