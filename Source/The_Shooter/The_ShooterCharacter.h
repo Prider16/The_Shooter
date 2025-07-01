@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Animation/AnimMontage.h"
-#include "Public/WeaponBase.h"
+#include "Public/Weapon/WeaponBase.h"
 #include "Components/TimelineComponent.h"
 #include "The_ShooterCharacter.generated.h"
 

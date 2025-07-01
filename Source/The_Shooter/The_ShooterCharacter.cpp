@@ -11,7 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Components/TimelineComponent.h"
-#include "Public/WeaponBase.h"
+#include "Public/Weapon/WeaponBase.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
