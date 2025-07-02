@@ -16,24 +16,28 @@ class THE_SHOOTER_API AWeaponBase : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* WeaponSkeletalMesh;
 
-	
-
-
 public:	
 	// Sets default values for this actor's properties
 	AWeaponBase();
 
+	// Variables
+	// Pistol
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
 	float Pistol_totalammo = 30.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
 	float Pistol_currentammo = 15.f;
 
+	// Rifle
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
 	float Rifle_totalammo = 60.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
 	float Rifle_currentammo = 30.f;
+
+	// Firing 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
+	bool Firing = false;
 
 	// Pistol Actions
 	void Pistol_Fire();
@@ -43,12 +47,26 @@ public:
 	void Rifle_Fire();
 	void Rifle_Reload();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Mesh")
+	USkeletalMeshComponent* GetWeaponMesh() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	// Damage that will be applied to other
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	float Pistol_Damage = 10.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	float Rifle_Damage = 30.0f;
+
+private:
+
+	// Function to Perform Line Trace
+	void PerformLineTrace(float Damage);
 
 };

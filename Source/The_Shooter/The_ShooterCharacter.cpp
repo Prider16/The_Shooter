@@ -109,6 +109,12 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::AimStart);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AThe_ShooterCharacter::AimStop);
 
+		// Firing
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::Firing);
+
+		// Reloading
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::Reload);
+
 	}
 	else
 	{
@@ -435,4 +441,48 @@ void AThe_ShooterCharacter::AimStop(const FInputActionValue& Value)
 		AimViewTimeline.ReverseFromEnd();
 	}
 	
+}
+
+void AThe_ShooterCharacter::Firing(const FInputActionValue& Value)
+{
+	if (bWeaponEquip)
+	{
+		if (bPistolEquip)
+		{
+			//if (PistolCharacterShootMontage && PistolGunShootMontage)
+			//{
+			//	GetMesh()->GetAnimInstance()->Montage_Play(PistolCharacterShootMontage);
+			//	PistolRefrence->GetWeaponMesh()->GetAnimInstance()->Montage_Play(PistolGunShootMontage);
+			//}
+
+			PlayAnimMontage(PistolCharacterShootMontage);
+			PistolRefrence->Pistol_Fire();
+		}
+		if (bRifleEquip)
+		{
+			//if (RifleCharacterShootMontage && RifleGunShootMontage)
+			//{
+			//	GetMesh()->GetAnimInstance()->Montage_Play(RifleCharacterShootMontage);
+			//	RifleRefrence->GetWeaponMesh()->GetAnimInstance()->Montage_Play(RifleGunShootMontage);
+			//}
+
+			PlayAnimMontage(RifleCharacterShootMontage);
+			RifleRefrence->Rifle_Fire();
+		}
+	}
+}
+
+void AThe_ShooterCharacter::Reload(const FInputActionValue& Value)
+{
+	if (bWeaponEquip)
+	{
+		if (bPistolEquip)
+		{
+			PistolRefrence->Pistol_Reload();
+		}
+		if (bRifleEquip)
+		{
+			RifleRefrence->Rifle_Reload();
+		}
+	}
 }

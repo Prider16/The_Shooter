@@ -72,6 +72,14 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AimAction;
 
+	/** Fire Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* FireAction;
+
+	/** Reload Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ReloadAction;
+
 	/*Valiables*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
 	bool bisCrouch;
@@ -133,7 +141,19 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCurveFloat* AimingViewCurve;
 
-	
+	/* Pistol Shoot Montage */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* PistolCharacterShootMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* PistolGunShootMontage;
+
+	/* Rifle Shoot Montage */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* RifleCharacterShootMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* RifleGunShootMontage;
 
 public:
 	AThe_ShooterCharacter();
@@ -182,6 +202,12 @@ protected:
 	void AimStart(const FInputActionValue& Value);
 	void AimStop(const FInputActionValue& Value);
 	
+	/** Called for Fire input */
+	void Firing(const FInputActionValue& Value);
+
+	/** Called for Reload input */
+	void Reload(const FInputActionValue& Value);
+
 protected:
 
 	//Spawn Weapon Function
