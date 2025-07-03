@@ -15,6 +15,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class UAnimMontage;
+class UAnimationAsset;
 class AActor;
 class UCurveFloat;
 class UTimelineComponent;
@@ -146,14 +147,34 @@ class AThe_ShooterCharacter : public ACharacter
 	UAnimMontage* PistolCharacterShootMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* PistolGunShootMontage;
+	UAnimationAsset* PistolGunShootMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimationAsset* PistolGunNoAmmoMontage;
 
 	/* Rifle Shoot Montage */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* RifleCharacterShootMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* RifleGunShootMontage;
+	UAnimationAsset* RifleGunShootMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimationAsset* RifleGunNoAmmoMontage;
+
+	/* Pistol Reload Montage */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* PistolCharacterReloadMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimationAsset* PistolGunReloadMontage;
+
+	/* Rifle Reload Montage */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* RifleCharacterReloadMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimationAsset* RifleGunReloadMontage;
 
 public:
 	AThe_ShooterCharacter();

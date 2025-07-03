@@ -447,27 +447,71 @@ void AThe_ShooterCharacter::Firing(const FInputActionValue& Value)
 {
 	if (bWeaponEquip)
 	{
-		if (bPistolEquip)
+		if (!bisSprint)
 		{
-			//if (PistolCharacterShootMontage && PistolGunShootMontage)
-			//{
-			//	GetMesh()->GetAnimInstance()->Montage_Play(PistolCharacterShootMontage);
-			//	PistolRefrence->GetWeaponMesh()->GetAnimInstance()->Montage_Play(PistolGunShootMontage);
-			//}
-
-			PlayAnimMontage(PistolCharacterShootMontage);
-			PistolRefrence->Pistol_Fire();
+			if (bPistolEquip)
+			{
+				if (PistolRefrence->Pistol_currentammo > 0.0f)
+				{
+					PlayAnimMontage(PistolCharacterShootMontage);
+					PistolRefrence->GetWeaponMesh()->PlayAnimation(PistolGunShootMontage, false);
+					PistolRefrence->Pistol_Fire();
+				}
+				else
+				{
+					PlayAnimMontage(PistolCharacterShootMontage);
+					PistolRefrence->GetWeaponMesh()->PlayAnimation(PistolGunNoAmmoMontage, false);
+					PistolRefrence->Pistol_Fire();
+				}
+			}
+			if (bRifleEquip)
+			{
+				if (RifleRefrence->Rifle_currentammo > 0.0f)
+				{
+					PlayAnimMontage(RifleCharacterShootMontage);
+					RifleRefrence->GetWeaponMesh()->PlayAnimation(RifleGunShootMontage, false);
+					RifleRefrence->Rifle_Fire();
+				}
+				else
+				{
+					PlayAnimMontage(RifleCharacterShootMontage);
+					RifleRefrence->GetWeaponMesh()->PlayAnimation(RifleGunNoAmmoMontage, false);
+					RifleRefrence->Rifle_Fire();
+				}
+			}
 		}
-		if (bRifleEquip)
+		if (bisSprint && bisAim)
 		{
-			//if (RifleCharacterShootMontage && RifleGunShootMontage)
-			//{
-			//	GetMesh()->GetAnimInstance()->Montage_Play(RifleCharacterShootMontage);
-			//	RifleRefrence->GetWeaponMesh()->GetAnimInstance()->Montage_Play(RifleGunShootMontage);
-			//}
-
-			PlayAnimMontage(RifleCharacterShootMontage);
-			RifleRefrence->Rifle_Fire();
+			if (bPistolEquip)
+			{
+				if (PistolRefrence->Pistol_currentammo > 0.0f)
+				{
+					PlayAnimMontage(PistolCharacterShootMontage);
+					PistolRefrence->GetWeaponMesh()->PlayAnimation(PistolGunShootMontage, false);
+					PistolRefrence->Pistol_Fire();
+				}
+				else
+				{
+					PlayAnimMontage(PistolCharacterShootMontage);
+					PistolRefrence->GetWeaponMesh()->PlayAnimation(PistolGunNoAmmoMontage, false);
+					PistolRefrence->Pistol_Fire();
+				}
+			}
+			if (bRifleEquip)
+			{
+				if (RifleRefrence->Rifle_currentammo > 0.0f)
+				{
+					PlayAnimMontage(RifleCharacterShootMontage);
+					RifleRefrence->GetWeaponMesh()->PlayAnimation(RifleGunShootMontage, false);
+					RifleRefrence->Rifle_Fire();
+				}
+				else
+				{
+					PlayAnimMontage(RifleCharacterShootMontage);
+					RifleRefrence->GetWeaponMesh()->PlayAnimation(RifleGunNoAmmoMontage, false);
+					RifleRefrence->Rifle_Fire();
+				}
+			}
 		}
 	}
 }
@@ -478,11 +522,21 @@ void AThe_ShooterCharacter::Reload(const FInputActionValue& Value)
 	{
 		if (bPistolEquip)
 		{
-			PistolRefrence->Pistol_Reload();
+			if (PistolRefrence->Pistol_currentammo != PistolRefrence->Pistol_totalammo)
+			{
+				PlayAnimMontage(PistolCharacterReloadMontage);
+				PistolRefrence->GetWeaponMesh()->PlayAnimation(PistolGunReloadMontage, false);
+				PistolRefrence->Pistol_Reload();
+			}
 		}
 		if (bRifleEquip)
 		{
-			RifleRefrence->Rifle_Reload();
+			if (RifleRefrence->Rifle_currentammo != RifleRefrence->Rifle_totalammo)
+			{
+				PlayAnimMontage(RifleCharacterReloadMontage);
+				RifleRefrence->GetWeaponMesh()->PlayAnimation(RifleGunReloadMontage, false);
+				RifleRefrence->Rifle_Reload();
+			}
 		}
 	}
 }

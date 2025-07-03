@@ -35,6 +35,13 @@ void AWeaponBase::Pistol_Fire()
 
 void AWeaponBase::Pistol_Reload()
 {
+	if (Pistol_currentammo == Pistol_totalammo)
+	{
+		// If we have full mag then we can't reload
+		UE_LOG(LogTemp, Warning, TEXT("Mah is fully Loaded"));
+		return;
+	}
+
 	Pistol_currentammo = Pistol_totalammo;
 }
 
@@ -55,6 +62,13 @@ void AWeaponBase::Rifle_Fire()
 
 void AWeaponBase::Rifle_Reload()
 {
+	if (Rifle_currentammo == Rifle_totalammo)
+	{
+		// If we have full mag then we can't reload
+		UE_LOG(LogTemp, Warning, TEXT("Mah is fully Loaded"));
+		return;
+	}
+
 	Rifle_currentammo = Rifle_totalammo;
 }
 
