@@ -241,7 +241,30 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	// FootSteps Variables
+	UPROPERTY(EditDefaultsOnly, Category = "Footsteps")
+	USoundBase* LeftFootstepSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Footsteps")
+	USoundBase* RightFootstepSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Footsteps")
+	float TraceDistance = 15.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Footsteps")
+	FName LeftFootBone = "foot_l";
+
+	UPROPERTY(EditDefaultsOnly, Category = "Footsteps")
+	FName RightFootBone = "foot_r";
+
 private:
+
+	// Variable To Check FootSteps
+	bool bLeftFootOnGround = false;
+	bool bRightFootOnGround = false;
+
+	// Function To check FootSteps
+	void CheckFootstep(FName BoneName, bool& bWasOnGround);
 
 	// Notify for pistol Equip
 	UFUNCTION()

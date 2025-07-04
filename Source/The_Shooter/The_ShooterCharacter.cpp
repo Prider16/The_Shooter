@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "Components/TimelineComponent.h"
 #include "Public/Weapon/WeaponBase.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -177,6 +178,9 @@ void AThe_ShooterCharacter::Tick(float DeltaTime)
 	AimCrouchTimeline.TickTimeline(DeltaTime);
 	AimViewTimeline.TickTimeline(DeltaTime);
 
+	// Tick Check for Foot Position
+	CheckFootstep(LeftFootBone, bLeftFootOnGround);
+	CheckFootstep(RightFootBone, bRightFootOnGround);
 }
 
 void AThe_ShooterCharacter::Move(const FInputActionValue& Value)
@@ -624,4 +628,40 @@ void AThe_ShooterCharacter::Reload(const FInputActionValue& Value)
 			}
 		}
 	}
+}
+
+void AThe_ShooterCharacter::CheckFootstep(FName BoneName, bool& bWasOnGround)
+{
+	if (!GetMesh()) return;
+
+	FVector BoneLocation = GetMesh()->GetBoneLocation(BoneName);
+	FVector EndLocation = BoneLocation - FVector(0, 0, TraceDistance);
+
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, BoneLocation, EndLocation, ECC_Visibility, Params);
+
+	if (bHit && !bWasOnGround && !bisCrouch)
+	{
+		bWasOnGround = true;
+
+		if (LeftFootstepSound && BoneName == LeftFootBone)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, LeftFootstepSound, BoneLocation);
+		}
+		if (RightFootstepSound && BoneName == RightFootBone)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, RightFootstepSound, BoneLocation);
+		}
+	}
+	else if (!bHit)
+	{
+		bWasOnGround = false;
+	}
+
+	// Draw debug trace
+	//DrawDebugLine(GetWorld(), BoneLocation, EndLocation, bHit ? FColor::Green : FColor::Red, false, 0.1f, 0, 1.0f);
+
 }
