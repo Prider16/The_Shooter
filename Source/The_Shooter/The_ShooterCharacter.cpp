@@ -280,39 +280,82 @@ void AThe_ShooterCharacter::Crouch(const FInputActionValue& Value)
 
 void AThe_ShooterCharacter::PistolEquip(const FInputActionValue& Value)
 {
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (bWeaponEquip)
 	{
 		if (bPistolEquip)
 		{
-			PlayAnimMontage(PistolUnEquipMontage);
-
-			// Destrying the Pistol
-			PistolRefrence->Destroy();
+			if (!AnimInstance || !PistolUnEquipMontage) return;
 
 			bWeaponEquip = false;
 			bPistolEquip = false;
+
+			AnimInstance->Montage_Play(PistolUnEquipMontage);
+
+			AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &AThe_ShooterCharacter::OnPistolUnEquipNotifyBeginReceived);
+			AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &AThe_ShooterCharacter::OnPistolUnEquipNotifyBeginReceived);
 		}
 		else
 		{
-			PlayAnimMontage(RifleUnEquipMontage);
-			RifleRefrence->Destroy();
+			if (!AnimInstance || !RifleUnEquipMontage || !PistolEquipMontage) return;
+
 			bRifleEquip = false;
 
-			PlayAnimMontage(PistolEquipMontage);
-			AThe_ShooterCharacter::SpawnPistol();
-			bPistolEquip = true;
-
+			float Duration = AnimInstance->Montage_Play(RifleUnEquipMontage);
+			AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &AThe_ShooterCharacter::OnRiflelUnEquipNotifyBeginReceived);
+			AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &AThe_ShooterCharacter::OnRiflelUnEquipNotifyBeginReceived);
+			if (Duration > 0.0f)
+			{
+				FOnMontageEnded EndDelegate;
+				EndDelegate.BindUObject(this, &AThe_ShooterCharacter::OnRifleMontageEnded);
+				AnimInstance->Montage_SetEndDelegate(EndDelegate, RifleUnEquipMontage);
+			}
 		}
 	}
 	else
 	{
+		if (!AnimInstance || !PistolEquipMontage) return;
 
-		AThe_ShooterCharacter::SpawnPistol();
-
-		PlayAnimMontage(PistolEquipMontage);
 		bWeaponEquip = true;
 		bPistolEquip = true;
+
+		AnimInstance->Montage_Play(PistolEquipMontage);
+
+		AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &AThe_ShooterCharacter::OnPistolEquipNotifyBeginReceived);
+		AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &AThe_ShooterCharacter::OnPistolEquipNotifyBeginReceived);
 	}
+}
+
+void AThe_ShooterCharacter::OnPistolEquipNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload)
+{
+	if (NotifyName == "Spawn Pistol")
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spawning pistol!"));
+		AThe_ShooterCharacter::SpawnPistol();
+	}
+}
+
+void AThe_ShooterCharacter::OnPistolUnEquipNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload)
+{
+	if (NotifyName == "Destroy Pistol")
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Destroying pistol!"));
+		PistolRefrence->Destroy();
+	}
+}
+
+void AThe_ShooterCharacter::OnPistolMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (!AnimInstance || !RifleEquipMontage) return;
+
+	bRifleEquip = true;
+
+	AnimInstance->Montage_Play(RifleEquipMontage);
+
+	AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &AThe_ShooterCharacter::OnRiflelEquipNotifyBeginReceived);
+	AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &AThe_ShooterCharacter::OnRiflelEquipNotifyBeginReceived);
+
 }
 
 void AThe_ShooterCharacter::SpawnPistol()
@@ -347,37 +390,79 @@ void AThe_ShooterCharacter::SpawnPistol()
 
 void AThe_ShooterCharacter::RifleEquip(const FInputActionValue& Value)
 {
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (bWeaponEquip)
 	{
 		if (bRifleEquip)
 		{
-			PlayAnimMontage(RifleUnEquipMontage);
-
-			// Destroy the Rifle
-			RifleRefrence->Destroy();
+			if (!AnimInstance || !RifleUnEquipMontage) return;
 
 			bWeaponEquip = false;
 			bRifleEquip = false;
+
+			AnimInstance->Montage_Play(RifleUnEquipMontage);
+
+			AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &AThe_ShooterCharacter::OnRiflelUnEquipNotifyBeginReceived);
+			AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &AThe_ShooterCharacter::OnRiflelUnEquipNotifyBeginReceived);
 		}
 		else
 		{
-			PlayAnimMontage(PistolUnEquipMontage);
-			PistolRefrence->Destroy();
+			if (!AnimInstance || !PistolUnEquipMontage || !RifleEquipMontage) return;
+
 			bPistolEquip = false;
 
-			PlayAnimMontage(RifleEquipMontage);
-			AThe_ShooterCharacter::SpawnRifle();
-			bRifleEquip = true;
+			float Duration = AnimInstance->Montage_Play(PistolUnEquipMontage);
+			AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &AThe_ShooterCharacter::OnPistolUnEquipNotifyBeginReceived);
+			AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &AThe_ShooterCharacter::OnPistolUnEquipNotifyBeginReceived);
+			if (Duration > 0.0f)
+			{
+				FOnMontageEnded EndDelegate;
+				EndDelegate.BindUObject(this, &AThe_ShooterCharacter::OnPistolMontageEnded);
+				AnimInstance->Montage_SetEndDelegate(EndDelegate, PistolUnEquipMontage);
+			}
 		}
 	}
 	else
 	{
-		AThe_ShooterCharacter::SpawnRifle();
-
-		PlayAnimMontage(RifleEquipMontage);
+		if (!AnimInstance || !RifleEquipMontage) return;
+		
 		bWeaponEquip = true;
 		bRifleEquip = true;
+
+		AnimInstance->Montage_Play(RifleEquipMontage);
+
+		AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &AThe_ShooterCharacter::OnRiflelEquipNotifyBeginReceived);
+		AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &AThe_ShooterCharacter::OnRiflelEquipNotifyBeginReceived);
 	}
+}
+
+void AThe_ShooterCharacter::OnRiflelEquipNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload)
+{
+	if (NotifyName == "Spawn Rifle")
+	{
+		AThe_ShooterCharacter::SpawnRifle();
+	}
+}
+
+void AThe_ShooterCharacter::OnRiflelUnEquipNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload)
+{
+	if (NotifyName == "Destroy Rifle")
+	{
+		RifleRefrence->Destroy();
+	}
+}
+
+void AThe_ShooterCharacter::OnRifleMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (!AnimInstance || !PistolEquipMontage) return;
+
+	bPistolEquip = true;
+
+	AnimInstance->Montage_Play(PistolEquipMontage);
+
+	AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &AThe_ShooterCharacter::OnPistolEquipNotifyBeginReceived);
+	AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &AThe_ShooterCharacter::OnPistolEquipNotifyBeginReceived);
 }
 
 void AThe_ShooterCharacter::SpawnRifle()

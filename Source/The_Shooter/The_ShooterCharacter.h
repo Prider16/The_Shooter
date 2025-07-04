@@ -241,6 +241,33 @@ protected:
 
 	virtual void BeginPlay() override;
 
+private:
+
+	// Notify for pistol Equip
+	UFUNCTION()
+	void OnPistolEquipNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload);
+
+	// Notify for pistol UnEquip
+	UFUNCTION()
+	void OnPistolUnEquipNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload);
+
+	// Notify for pistol UnEquip
+	UFUNCTION()
+	void OnPistolMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	// Notify for Rifle Equip
+	UFUNCTION()
+	void OnRiflelEquipNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload);
+
+	// Notify for Rifle UnEquip
+	UFUNCTION()
+	void OnRiflelUnEquipNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload);
+
+	// Notify for pistol UnEquip
+	UFUNCTION()
+	void OnRifleMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+
 public:
 
 	virtual void Tick(float DeltaTime) override;
