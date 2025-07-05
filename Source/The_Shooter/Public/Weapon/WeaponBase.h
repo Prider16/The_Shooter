@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "NiagaraSystem.h" 
 #include "WeaponBase.generated.h"
+
+//class UNiagaraSystem;
 
 UCLASS()
 class THE_SHOOTER_API AWeaponBase : public AActor
@@ -28,12 +31,18 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
 	float Pistol_currentammo = 15.f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Variables)
+	float Pistol_maxammo = 15.f;
+
 	// Rifle
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
-	float Rifle_totalammo = 60.f;
+	float Rifle_totalammo = 30.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
 	float Rifle_currentammo = 30.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Variables)
+	float Rifle_maxammo = 30.f;
 
 	// Firing 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
@@ -52,6 +61,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Mesh")
 	USkeletalMeshComponent* GetWeaponMesh() const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = ParticleEffect)
+	UNiagaraSystem* ParticleToSpawn;
 
 protected:
 	// Called when the game starts or when spawned

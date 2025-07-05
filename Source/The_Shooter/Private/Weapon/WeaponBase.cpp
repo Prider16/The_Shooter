@@ -5,6 +5,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraSystem.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -23,7 +25,7 @@ void AWeaponBase::Pistol_Fire()
 	if (Pistol_currentammo <= 0.0f) 
 	{ 
 		// If we have 0 ammo then we can't shoot, We need to Reload
-		UE_LOG(LogTemp, Warning, TEXT("Out of Ammo!"));
+		UE_LOG(LogTemp, Warning, TEXT("Reload!"));
 		return;
 	};
 
@@ -35,14 +37,24 @@ void AWeaponBase::Pistol_Fire()
 
 void AWeaponBase::Pistol_Reload()
 {
+	if (Pistol_totalammo <= 0.0f)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Out of Ammo!"));
+		return;
+	}
 	if (Pistol_currentammo == Pistol_totalammo)
 	{
 		// If we have full mag then we can't reload
-		UE_LOG(LogTemp, Warning, TEXT("Mah is fully Loaded"));
+		UE_LOG(LogTemp, Warning, TEXT("Mag is fully Loaded"));
 		return;
 	}
+	
+	float TempAmmo = Pistol_maxammo - Pistol_currentammo;
 
-	Pistol_currentammo = Pistol_totalammo;
+	Pistol_currentammo = Pistol_currentammo + TempAmmo;
+
+	Pistol_totalammo = Pistol_totalammo - TempAmmo;
+
 }
 
 void AWeaponBase::Rifle_Fire()
@@ -51,7 +63,7 @@ void AWeaponBase::Rifle_Fire()
 	if (Rifle_currentammo <= 0.0f)
 	{
 		// If we have 0 ammo then we can't shoot, We need to Reload
-		UE_LOG(LogTemp, Warning, TEXT("Out of Ammo!"));
+		UE_LOG(LogTemp, Warning, TEXT("Reload!"));
 		return;
 	};
 
@@ -62,14 +74,23 @@ void AWeaponBase::Rifle_Fire()
 
 void AWeaponBase::Rifle_Reload()
 {
-	if (Rifle_currentammo == Rifle_totalammo)
+	if (Rifle_totalammo <= 0.0f)
 	{
-		// If we have full mag then we can't reload
-		UE_LOG(LogTemp, Warning, TEXT("Mah is fully Loaded"));
+		UE_LOG(LogTemp, Warning, TEXT("Out of Ammo!"));
 		return;
 	}
 
-	Rifle_currentammo = Rifle_totalammo;
+	if (Rifle_currentammo == Rifle_totalammo)
+	{
+		// If we have full mag then we can't reload
+		UE_LOG(LogTemp, Warning, TEXT("Mag is fully Loaded"));
+		return;
+	}
+	float TempAmmo = Rifle_maxammo - Rifle_currentammo;
+
+	Rifle_currentammo = Rifle_currentammo + TempAmmo;
+
+	Rifle_totalammo = Rifle_totalammo - TempAmmo;
 }
 
 void AWeaponBase::PerformLineTrace(float Damage)
@@ -87,8 +108,7 @@ void AWeaponBase::PerformLineTrace(float Damage)
 
 	FHitResult Hit;
 	FCollisionQueryParams Params;
-	// Ignore weapon
-	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(this); // Ignore weapon
 
 	// Do linetrace and store in bool to check if we did hit or not
 	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Location, End, ECC_Visibility, Params);
@@ -96,6 +116,17 @@ void AWeaponBase::PerformLineTrace(float Damage)
 	// we linetrace hit something...
 	if (bHit)
 	{
+
+		/*if (ParticleToSpawn)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+				GetWorld(),
+				ParticleToSpawn,
+				Hit.ImpactPoint,
+				Hit.ImpactNormal.Rotation()
+			);
+		}*/
+
 		// ... We get the hit actor
 		AActor* HitActor = Hit.GetActor();
 		if (HitActor)
