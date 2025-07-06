@@ -13,6 +13,7 @@
 #include "Components/TimelineComponent.h"
 #include "Public/Weapon/WeaponBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Public/User_Interface/BaseUserWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -126,6 +127,18 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void AThe_ShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Adding and creating Character HUD
+	if (CharacterHUDClass)
+	{
+		// if yes then Create a Widget
+		CharacterHUD = CreateWidget<UBaseUserWidget>(GetWorld(), CharacterHUDClass);
+		if (CharacterHUD)
+		{
+			// if created Successfully then Add to viewport
+			CharacterHUD->AddToViewport();
+		}
+	}
 
 	// Setting Up Crouch TimeLine
 	if (CrouchCurve)
@@ -382,6 +395,8 @@ void AThe_ShooterCharacter::SpawnPistol()
 
 	PistolRefrence = SpawnedPistol;
 
+	CharacterHUD->SetPistolRefrence(SpawnedPistol);
+
 	// if the pistol is spawned...
 	if (SpawnedPistol)
 	{
@@ -488,6 +503,8 @@ void AThe_ShooterCharacter::SpawnRifle()
 	AWeaponBase* SpawnedRifle = World->SpawnActor<AWeaponBase>(RifleBlueprint, SpawnTransform, SpawnParams);
 
 	RifleRefrence = SpawnedRifle;
+
+	CharacterHUD->SetRifleRefrence(SpawnedRifle);
 
 	// if the Rifle is spawned...
 	if (SpawnedRifle)

@@ -8,6 +8,7 @@
 #include "Animation/AnimMontage.h"
 #include "Public/Weapon/WeaponBase.h"
 #include "Components/TimelineComponent.h"
+#include "Public/User_Interface/BaseUserWidget.h"
 #include "The_ShooterCharacter.generated.h"
 
 class USpringArmComponent;
@@ -19,6 +20,7 @@ class UAnimationAsset;
 class AActor;
 class UCurveFloat;
 class UTimelineComponent;
+class UBaseUserWidget;
 struct FInputActionValue;
 
 
@@ -175,6 +177,13 @@ class AThe_ShooterCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimationAsset* RifleGunReloadMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = UI)
+	TSubclassOf<UBaseUserWidget> CharacterHUDClass;
+
+	/*A Variable to store the UI HUD for Furthur use*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
+	UBaseUserWidget* CharacterHUD;
 
 public:
 	AThe_ShooterCharacter();
