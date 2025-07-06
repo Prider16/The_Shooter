@@ -140,6 +140,10 @@ void AThe_ShooterCharacter::BeginPlay()
 		}
 	}
 
+	// Spawning the Weapons
+	AThe_ShooterCharacter::SpawnPistol();
+	AThe_ShooterCharacter::SpawnRifle();
+
 	// Setting Up Crouch TimeLine
 	if (CrouchCurve)
 	{
@@ -347,8 +351,8 @@ void AThe_ShooterCharacter::OnPistolEquipNotifyBeginReceived(FName NotifyName, c
 {
 	if (NotifyName == "Spawn Pistol")
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spawning pistol!"));
-		AThe_ShooterCharacter::SpawnPistol();
+		UE_LOG(LogTemp, Warning, TEXT("Setting up pistol!"));
+		AttachWeapon("Pistol_Socket", PistolRefrence);
 	}
 }
 
@@ -356,8 +360,7 @@ void AThe_ShooterCharacter::OnPistolUnEquipNotifyBeginReceived(FName NotifyName,
 {
 	if (NotifyName == "Destroy Pistol")
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Destroying pistol!"));
-		PistolRefrence->Destroy();
+		AttachWeapon("PistolHost_Socket", PistolRefrence);
 	}
 }
 
@@ -400,10 +403,7 @@ void AThe_ShooterCharacter::SpawnPistol()
 	// if the pistol is spawned...
 	if (SpawnedPistol)
 	{
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-
-		//... Attaching it to the component
-		SpawnedPistol->AttachToComponent(GetMesh(), AttachmentRules, TEXT("Pistol_Socket"));
+		AttachWeapon("PistolHost_Socket", SpawnedPistol);
 	}
 }
 
@@ -459,7 +459,7 @@ void AThe_ShooterCharacter::OnRiflelEquipNotifyBeginReceived(FName NotifyName, c
 {
 	if (NotifyName == "Spawn Rifle")
 	{
-		AThe_ShooterCharacter::SpawnRifle();
+		AttachWeapon("Rifle_Socket", RifleRefrence);
 	}
 }
 
@@ -467,7 +467,7 @@ void AThe_ShooterCharacter::OnRiflelUnEquipNotifyBeginReceived(FName NotifyName,
 {
 	if (NotifyName == "Destroy Rifle")
 	{
-		RifleRefrence->Destroy();
+		AttachWeapon("RifleHost_Socket", RifleRefrence);
 	}
 }
 
@@ -509,11 +509,16 @@ void AThe_ShooterCharacter::SpawnRifle()
 	// if the Rifle is spawned...
 	if (SpawnedRifle)
 	{
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-
-		//... Attaching it to the component
-		SpawnedRifle->AttachToComponent(GetMesh(), AttachmentRules, TEXT("Rifle_Socket"));
+		AttachWeapon("RifleHost_Socket", SpawnedRifle);
 	}
+}
+
+void AThe_ShooterCharacter::AttachWeapon(FName Socket, AWeaponBase* Weapon)
+{
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+
+	//... Attaching it to the component
+	Weapon->AttachToComponent(GetMesh(), AttachmentRules, Socket);
 }
 
 void AThe_ShooterCharacter::AimStart(const FInputActionValue& Value)

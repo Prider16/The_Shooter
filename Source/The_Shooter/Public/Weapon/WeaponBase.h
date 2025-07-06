@@ -26,23 +26,23 @@ public:
 	// Variables
 	// Pistol
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
-	float Pistol_totalammo = 30.f;
+	int32 Pistol_totalammo = 30.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
-	float Pistol_currentammo = 15.f;
+	int32 Pistol_currentammo = 15.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Variables)
-	float Pistol_maxammo = 15.f;
+	int32 Pistol_maxammo = 15.f;
 
 	// Rifle
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
-	float Rifle_totalammo = 30.f;
+	int32 Rifle_totalammo = 30.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
-	float Rifle_currentammo = 30.f;
+	int32 Rifle_currentammo = 30.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Variables)
-	float Rifle_maxammo = 30.f;
+	int32 Rifle_maxammo = 30.f;
 
 	// Firing 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)

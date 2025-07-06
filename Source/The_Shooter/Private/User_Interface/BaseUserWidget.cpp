@@ -49,22 +49,22 @@ void UBaseUserWidget::SetPistolRefrence(AWeaponBase* PistolRef)
 
 FText UBaseUserWidget::GetPistolCurrentAmmo() const
 {
-	return FText::FromString(FString::Printf(TEXT("%f"), PistolRefrence->Pistol_currentammo));
+	return FText::FromString(FString::Printf(TEXT("%d"), PistolRefrence->Pistol_currentammo));
 }
 
 FText UBaseUserWidget::GetPistolTotalAmmo() const
 {
-	return FText::FromString(FString::Printf(TEXT("%f"), PistolRefrence->Pistol_totalammo));
+	return FText::FromString(FString::Printf(TEXT("%d"), PistolRefrence->Pistol_totalammo));
 }
 
 FText UBaseUserWidget::GetRifleCurrentAmmo() const
 {
-	return FText::FromString(FString::Printf(TEXT("%f"), RifleRefrence->Rifle_currentammo));
+	return FText::FromString(FString::Printf(TEXT("%d"), RifleRefrence->Rifle_currentammo));
 }
 
 FText UBaseUserWidget::GetRifleTotalAmmo() const
 {
-	return FText::FromString(FString::Printf(TEXT("%f"), RifleRefrence->Rifle_totalammo));
+	return FText::FromString(FString::Printf(TEXT("%d"), RifleRefrence->Rifle_totalammo));
 }
 
 

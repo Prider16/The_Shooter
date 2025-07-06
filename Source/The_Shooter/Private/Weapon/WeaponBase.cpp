@@ -22,7 +22,7 @@ AWeaponBase::AWeaponBase()
 void AWeaponBase::Pistol_Fire()
 {
 	Firing = true;
-	if (Pistol_currentammo <= 0.0f) 
+	if (Pistol_currentammo <= 0) 
 	{ 
 		// If we have 0 ammo then we can't shoot, We need to Reload
 		UE_LOG(LogTemp, Warning, TEXT("Reload!"));
@@ -37,7 +37,7 @@ void AWeaponBase::Pistol_Fire()
 
 void AWeaponBase::Pistol_Reload()
 {
-	if (Pistol_totalammo <= 0.0f)
+	if (Pistol_totalammo <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Out of Ammo!"));
 		return;
@@ -60,7 +60,7 @@ void AWeaponBase::Pistol_Reload()
 void AWeaponBase::Rifle_Fire()
 {
 	Firing = true;
-	if (Rifle_currentammo <= 0.0f)
+	if (Rifle_currentammo <= 0)
 	{
 		// If we have 0 ammo then we can't shoot, We need to Reload
 		UE_LOG(LogTemp, Warning, TEXT("Reload!"));
@@ -74,7 +74,7 @@ void AWeaponBase::Rifle_Fire()
 
 void AWeaponBase::Rifle_Reload()
 {
-	if (Rifle_totalammo <= 0.0f)
+	if (Rifle_totalammo <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Out of Ammo!"));
 		return;

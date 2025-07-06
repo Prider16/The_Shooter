@@ -275,6 +275,9 @@ private:
 	// Function To check FootSteps
 	void CheckFootstep(FName BoneName, bool& bWasOnGround);
 
+	// Function to attach Weapon to Components
+	void AttachWeapon(FName Socket, AWeaponBase* Weapoon);
+
 	// Notify for pistol Equip
 	UFUNCTION()
 	void OnPistolEquipNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload);
