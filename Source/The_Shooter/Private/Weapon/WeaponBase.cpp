@@ -137,7 +137,7 @@ void AWeaponBase::PerformLineTrace(float Damage)
 	}
 
 	// Debug line
-	DrawDebugLine(GetWorld(), Location, End, FColor::Red, false, 2.0f, 0, 1.0f);
+	//DrawDebugLine(GetWorld(), Location, End, FColor::Red, false, 2.0f, 0, 1.0f);
 }
 
 // Called when the game starts or when spawned

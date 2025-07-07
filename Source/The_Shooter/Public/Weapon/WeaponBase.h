@@ -26,7 +26,7 @@ public:
 	// Variables
 	// Pistol
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
-	int32 Pistol_totalammo = 30.f;
+	int32 Pistol_totalammo = 45.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
 	int32 Pistol_currentammo = 15.f;
@@ -36,7 +36,7 @@ public:
 
 	// Rifle
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
-	int32 Rifle_totalammo = 30.f;
+	int32 Rifle_totalammo = 60.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables)
 	int32 Rifle_currentammo = 30.f;
