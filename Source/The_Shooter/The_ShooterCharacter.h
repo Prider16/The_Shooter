@@ -196,6 +196,13 @@ public:
 	FTimeline AimCrouchTimeline;
 	FTimeline AimViewTimeline;
 
+	// Health Setter
+	UFUNCTION(BlueprintCallable)
+	void TakeDamage(float Damage);
+
+	UFUNCTION(BlueprintCallable)
+	float GetHealth();
+
 protected:
 
 	/** Called for movement input */
@@ -238,8 +245,6 @@ protected:
 	/** Called for Reload input */
 	void Reload(const FInputActionValue& Value);
 
-protected:
-
 	//Spawn Weapon Function
 	void SpawnPistol();
 	void SpawnRifle();
@@ -271,6 +276,9 @@ private:
 	// Variable To Check FootSteps
 	bool bLeftFootOnGround = false;
 	bool bRightFootOnGround = false;
+
+	//Health Variable
+	float Health = 500.0f;
 
 	// Function To check FootSteps
 	void CheckFootstep(FName BoneName, bool& bWasOnGround);

@@ -51,10 +51,16 @@ void AWeaponBase::Pistol_Reload()
 	
 	float TempAmmo = Pistol_maxammo - Pistol_currentammo;
 
-	Pistol_currentammo = Pistol_currentammo + TempAmmo;
-
-	Pistol_totalammo = Pistol_totalammo - TempAmmo;
-
+	if (TempAmmo <= Pistol_totalammo)
+	{
+		Pistol_currentammo += TempAmmo;
+		Pistol_totalammo -= TempAmmo;
+	}
+	else
+	{
+		Pistol_currentammo += Pistol_totalammo;
+		Pistol_totalammo = 0;
+	}
 }
 
 void AWeaponBase::Rifle_Fire()
@@ -88,9 +94,16 @@ void AWeaponBase::Rifle_Reload()
 	}
 	float TempAmmo = Rifle_maxammo - Rifle_currentammo;
 
-	Rifle_currentammo = Rifle_currentammo + TempAmmo;
-
-	Rifle_totalammo = Rifle_totalammo - TempAmmo;
+	if (TempAmmo <= Pistol_totalammo)
+	{
+		Rifle_currentammo += TempAmmo;
+		Rifle_totalammo -= TempAmmo;
+	}
+	else
+	{
+		Rifle_currentammo += Rifle_totalammo;
+		Rifle_totalammo = 0;
+	}
 }
 
 void AWeaponBase::PerformLineTrace(float Damage)

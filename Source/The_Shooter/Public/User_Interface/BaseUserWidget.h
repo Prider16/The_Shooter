@@ -25,6 +25,9 @@ public:
 	UFUNCTION()
 	void SetPistolRefrence(AWeaponBase* PistolRef);
 
+	UFUNCTION()
+	void SetHealth(float Value);
+
 	UFUNCTION(BlueprintPure, Category = "UI")
 	FText GetPistolCurrentAmmo() const;
 
@@ -37,12 +40,17 @@ public:
 	UFUNCTION(BlueprintPure, Category = "UI")
 	FText GetRifleTotalAmmo() const;
 
+	UFUNCTION(BlueprintPure, Category = "UI")
+	float GetPlayerHealth() const;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapons")
 	AWeaponBase* RifleRefrence = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapons")
 	AWeaponBase* PistolRefrence = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	float Health = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "variables")
 	float Pistol_CurrentAmmo = 0.0f;

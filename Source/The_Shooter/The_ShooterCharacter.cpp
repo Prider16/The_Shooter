@@ -140,6 +140,8 @@ void AThe_ShooterCharacter::BeginPlay()
 		}
 	}
 
+	CharacterHUD->SetHealth(Health);
+
 	// Spawning the Weapons
 	AThe_ShooterCharacter::SpawnPistol();
 	AThe_ShooterCharacter::SpawnRifle();
@@ -633,20 +635,20 @@ void AThe_ShooterCharacter::Reload(const FInputActionValue& Value)
 	{
 		if (bPistolEquip)
 		{
-			if (PistolRefrence->Pistol_currentammo != PistolRefrence->Pistol_totalammo)
+			if (PistolRefrence->Pistol_currentammo != PistolRefrence->Pistol_totalammo && PistolRefrence->Pistol_totalammo != 0)
 			{
+				PistolRefrence->Pistol_Reload();
 				PlayAnimMontage(PistolCharacterReloadMontage);
 				PistolRefrence->GetWeaponMesh()->PlayAnimation(PistolGunReloadMontage, false);
-				PistolRefrence->Pistol_Reload();
 			}
 		}
 		if (bRifleEquip)
 		{
-			if (RifleRefrence->Rifle_currentammo != RifleRefrence->Rifle_totalammo)
+			if (RifleRefrence->Rifle_currentammo != RifleRefrence->Rifle_totalammo && RifleRefrence->Rifle_totalammo != 0)
 			{
+				RifleRefrence->Rifle_Reload();
 				PlayAnimMontage(RifleCharacterReloadMontage);
 				RifleRefrence->GetWeaponMesh()->PlayAnimation(RifleGunReloadMontage, false);
-				RifleRefrence->Rifle_Reload();
 			}
 		}
 	}
@@ -686,4 +688,22 @@ void AThe_ShooterCharacter::CheckFootstep(FName BoneName, bool& bWasOnGround)
 	// Draw debug trace
 	//DrawDebugLine(GetWorld(), BoneLocation, EndLocation, bHit ? FColor::Green : FColor::Red, false, 0.1f, 0, 1.0f);
 
+}
+
+void AThe_ShooterCharacter::TakeDamage(float Damage)
+{
+	Health = Health - Damage;
+
+	CharacterHUD->SetHealth(Health);
+
+	if (Health <= 0.0f)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("You are dead!"));
+	}
+
+}
+
+float AThe_ShooterCharacter::GetHealth()
+{
+	return Health;
 }

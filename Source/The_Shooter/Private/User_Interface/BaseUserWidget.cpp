@@ -47,6 +47,11 @@ void UBaseUserWidget::SetPistolRefrence(AWeaponBase* PistolRef)
 	//Pistol_TotalAmmo = PistolRefrence->Pistol_totalammo;
 }
 
+void UBaseUserWidget::SetHealth(float Value)
+{
+	Health = Value;
+}
+
 FText UBaseUserWidget::GetPistolCurrentAmmo() const
 {
 	return FText::FromString(FString::Printf(TEXT("%d"), PistolRefrence->Pistol_currentammo));
@@ -65,6 +70,13 @@ FText UBaseUserWidget::GetRifleCurrentAmmo() const
 FText UBaseUserWidget::GetRifleTotalAmmo() const
 {
 	return FText::FromString(FString::Printf(TEXT("%d"), RifleRefrence->Rifle_totalammo));
+}
+
+float UBaseUserWidget::GetPlayerHealth() const
+{
+	float value = Health / 500.0f;
+
+	return value;
 }
 
 
