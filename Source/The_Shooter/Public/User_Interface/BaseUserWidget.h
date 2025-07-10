@@ -64,4 +64,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "variables")
 	float Rifle_TotalAmmo = 0.0f;
 
+	int32 Bandages;
+
+	UFUNCTION()
+	void SetBandageCount(int32 Value);
+
+	UFUNCTION(BlueprintPure, Category = "UI")
+	FText GetBandageCount() const;
+
 };

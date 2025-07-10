@@ -117,6 +117,9 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		// Reloading
 		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::Reload);
 
+		// Restore Health
+		EnhancedInputComponent->BindAction(RestoreHealthAction, ETriggerEvent::Started, this, &AThe_ShooterCharacter::RestoreHealth);
+
 	}
 	else
 	{
@@ -127,6 +130,8 @@ void AThe_ShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void AThe_ShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	HealthBandageCount = 2;
 
 	// Adding and creating Character HUD
 	if (CharacterHUDClass)
@@ -141,6 +146,7 @@ void AThe_ShooterCharacter::BeginPlay()
 	}
 
 	CharacterHUD->SetHealth(Health);
+	CharacterHUD->SetBandageCount(HealthBandageCount);
 
 	// Spawning the Weapons
 	AThe_ShooterCharacter::SpawnPistol();
@@ -654,6 +660,26 @@ void AThe_ShooterCharacter::Reload(const FInputActionValue& Value)
 	}
 }
 
+void AThe_ShooterCharacter::RestoreHealth(const FInputActionValue& Value)
+{
+	if (HealthBandageCount <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("You have no Bandages!"));
+		UE_LOG(LogTemp, Warning, TEXT("Bandages %d"),HealthBandageCount);
+		return;
+	}
+	if (Health == 100.0f)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("You have full Health!"));
+		return;
+	}
+	HealthBandageCount--;
+	CharacterHUD->SetBandageCount(HealthBandageCount);
+	if (Health <= 60.0f){ Health += 40.0f; }
+	else{ Health = 100.0f; }
+	CharacterHUD->SetHealth(Health);
+}
+
 void AThe_ShooterCharacter::CheckFootstep(FName BoneName, bool& bWasOnGround)
 {
 	if (!GetMesh()) return;
@@ -706,4 +732,9 @@ void AThe_ShooterCharacter::TakeDamage(float Damage)
 float AThe_ShooterCharacter::GetHealth()
 {
 	return Health;
+}
+
+void AThe_ShooterCharacter::AddBandages(int32 Value)
+{
+	HealthBandageCount += Value;
 }

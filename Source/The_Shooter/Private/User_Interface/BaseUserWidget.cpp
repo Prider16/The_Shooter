@@ -74,9 +74,19 @@ FText UBaseUserWidget::GetRifleTotalAmmo() const
 
 float UBaseUserWidget::GetPlayerHealth() const
 {
-	float value = Health / 500.0f;
+	float value = Health / 100.0f;
 
 	return value;
+}
+
+void UBaseUserWidget::SetBandageCount(int32 Value)
+{
+	Bandages = Value;
+}
+
+FText UBaseUserWidget::GetBandageCount() const
+{
+	return FText::FromString(FString::Printf(TEXT("%d"), Bandages));
 }
 
 

@@ -83,6 +83,10 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ReloadAction;
 
+	/** Reload Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* RestoreHealthAction;
+
 	/*Valiables*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
 	bool bisCrouch;
@@ -185,6 +189,9 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = UI, meta = (AllowPrivateAccess = "true"))
 	UBaseUserWidget* CharacterHUD;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
+	int32 HealthBandageCount;
+
 public:
 	AThe_ShooterCharacter();
 
@@ -202,6 +209,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetHealth();
+
+	UFUNCTION(BlueprintCallable)
+	void AddBandages(int32 Value);
 
 protected:
 
@@ -245,6 +255,9 @@ protected:
 	/** Called for Reload input */
 	void Reload(const FInputActionValue& Value);
 
+	/** Called for Restoring Health input */
+	void RestoreHealth(const FInputActionValue& Value);
+
 	//Spawn Weapon Function
 	void SpawnPistol();
 	void SpawnRifle();
@@ -278,7 +291,7 @@ private:
 	bool bRightFootOnGround = false;
 
 	//Health Variable
-	float Health = 500.0f;
+	float Health = 100.0f;
 
 	// Function To check FootSteps
 	void CheckFootstep(FName BoneName, bool& bWasOnGround);
