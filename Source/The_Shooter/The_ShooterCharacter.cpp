@@ -737,4 +737,15 @@ float AThe_ShooterCharacter::GetHealth()
 void AThe_ShooterCharacter::AddBandages(int32 Value)
 {
 	HealthBandageCount += Value;
+	CharacterHUD->SetBandageCount(HealthBandageCount);
+}
+
+void AThe_ShooterCharacter::AddPistolAmmos(int32 Value)
+{
+	PistolRefrence->Pistol_totalammo += Value;
+}
+
+void AThe_ShooterCharacter::AddRifleAmmos(int32 Value)
+{
+	RifleRefrence->Rifle_totalammo += Value;
 }

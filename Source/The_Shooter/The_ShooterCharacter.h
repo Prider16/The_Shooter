@@ -213,6 +213,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void AddBandages(int32 Value);
 
+	UFUNCTION(BlueprintCallable)
+	void AddPistolAmmos(int32 Value);
+
+	UFUNCTION(BlueprintCallable)
+	void AddRifleAmmos(int32 Value);
+
 protected:
 
 	/** Called for movement input */
