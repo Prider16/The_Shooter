@@ -21,6 +21,11 @@ AHealthBandages::AHealthBandages()
 	CollisionSphere->InitSphereRadius(200.f);
 	CollisionSphere->SetCollisionProfileName(TEXT("Trigger"));
 
+	// Set default values
+	HoverHeight = 20.0f;
+	HoverSpeed = 3.0f;
+	RunningTime = 0.0f;
+
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHealthBandages::OnOverlapBegin);
 }
 
@@ -35,6 +40,14 @@ void AHealthBandages::BeginPlay()
 void AHealthBandages::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	RunningTime += DeltaTime;
+
+	// Calculate vertical offset using sine wave
+	FVector NewLocation = GetActorLocation();
+	NewLocation.Z += FMath::Sin(RunningTime * HoverSpeed) * HoverHeight * DeltaTime;
+
+	SetActorLocation(NewLocation);
 
 }
 

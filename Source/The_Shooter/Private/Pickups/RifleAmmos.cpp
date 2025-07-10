@@ -22,6 +22,11 @@ ARifleAmmos::ARifleAmmos()
 	CollisionSphere->InitSphereRadius(200.f);
 	CollisionSphere->SetCollisionProfileName(TEXT("Trigger"));
 
+	// Set default values
+	HoverHeight = 20.0f;
+	HoverSpeed = 3.0f;
+	RunningTime = 0.0f;
+
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &ARifleAmmos::OnOverlapBegin);
 
 }
@@ -38,6 +43,13 @@ void ARifleAmmos::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	RunningTime += DeltaTime;
+
+	// Calculate vertical offset using sine wave
+	FVector NewLocation = GetActorLocation();
+	NewLocation.Z += FMath::Sin(RunningTime * HoverSpeed) * HoverHeight * DeltaTime;
+
+	SetActorLocation(NewLocation);
 }
 void ARifleAmmos::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {

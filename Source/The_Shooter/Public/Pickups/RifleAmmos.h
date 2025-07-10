@@ -20,9 +20,20 @@ class THE_SHOOTER_API ARifleAmmos : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
 	USphereComponent* CollisionSphere;
 
+	// Amplitude of hover
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hover", meta = (AllowPrivateAccess = "true"))
+	float HoverHeight;
+
+	// Speed of hover
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hover", meta = (AllowPrivateAccess = "true"))
+	float HoverSpeed;
+
 public:	
 	// Sets default values for this actor's properties
 	ARifleAmmos();
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -33,8 +44,7 @@ protected:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 		bool bFromSweep, const FHitResult& SweepResult);
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+private:
+	// For animation timing
+	float RunningTime;
 };

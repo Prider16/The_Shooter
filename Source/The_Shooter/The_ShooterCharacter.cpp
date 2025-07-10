@@ -665,7 +665,6 @@ void AThe_ShooterCharacter::RestoreHealth(const FInputActionValue& Value)
 	if (HealthBandageCount <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("You have no Bandages!"));
-		UE_LOG(LogTemp, Warning, TEXT("Bandages %d"),HealthBandageCount);
 		return;
 	}
 	if (Health == 100.0f)
