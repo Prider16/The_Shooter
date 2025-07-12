@@ -28,7 +28,7 @@ class THE_SHOOTER_API AHealthBandages : public AActor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hover", meta = (AllowPrivateAccess = "true"))
 	float HoverSpeed;
 
-
+	
 public:	
 	// Sets default values for this actor's properties
 	AHealthBandages();

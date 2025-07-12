@@ -182,6 +182,10 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimationAsset* RifleGunReloadMontage;
 
+	/* Health Drink Animation */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* HealingMontage;
+
 	UPROPERTY(EditDefaultsOnly, Category = UI)
 	TSubclassOf<UBaseUserWidget> CharacterHUDClass;
 
@@ -329,6 +333,8 @@ private:
 	UFUNCTION()
 	void OnRifleMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
+	UFUNCTION()
+	void OnHealingNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload);
 
 public:
 

@@ -672,11 +672,25 @@ void AThe_ShooterCharacter::RestoreHealth(const FInputActionValue& Value)
 		UE_LOG(LogTemp, Warning, TEXT("You have full Health!"));
 		return;
 	}
-	HealthBandageCount--;
-	CharacterHUD->SetBandageCount(HealthBandageCount);
-	if (Health <= 60.0f){ Health += 40.0f; }
-	else{ Health = 100.0f; }
-	CharacterHUD->SetHealth(Health);
+	
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (!AnimInstance || !HealingMontage) return;
+	AnimInstance->Montage_Play(HealingMontage);
+
+	AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &AThe_ShooterCharacter::OnHealingNotifyBeginReceived);
+	AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &AThe_ShooterCharacter::OnHealingNotifyBeginReceived);
+}
+
+void AThe_ShooterCharacter::OnHealingNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload)
+{
+	if (NotifyName == "IncreaseHealth")
+	{
+		HealthBandageCount--;
+		CharacterHUD->SetBandageCount(HealthBandageCount);
+		if (Health <= 60.0f) { Health += 40.0f; }
+		else { Health = 100.0f; }
+		CharacterHUD->SetHealth(Health);
+	}
 }
 
 void AThe_ShooterCharacter::CheckFootstep(FName BoneName, bool& bWasOnGround)

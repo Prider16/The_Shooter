@@ -23,7 +23,7 @@ AHealthBandages::AHealthBandages()
 
 	// Set default values
 	HoverHeight = 20.0f;
-	HoverSpeed = 3.0f;
+	HoverSpeed = 6.0f;
 	RunningTime = 0.0f;
 
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHealthBandages::OnOverlapBegin);
