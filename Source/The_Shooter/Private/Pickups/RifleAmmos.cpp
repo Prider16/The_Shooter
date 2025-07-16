@@ -24,7 +24,7 @@ ARifleAmmos::ARifleAmmos()
 
 	// Set default values
 	HoverHeight = 20.0f;
-	HoverSpeed = 5.0f;
+	HoverSpeed = 6.0f;
 	RunningTime = 0.0f;
 
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &ARifleAmmos::OnOverlapBegin);

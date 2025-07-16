@@ -25,7 +25,7 @@ APistolAmmos::APistolAmmos()
 
 	// Set default values
 	HoverHeight = 20.0f;
-	HoverSpeed = 4.0f;
+	HoverSpeed = 6.0f;
 	RunningTime = 0.0f;
 
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &APistolAmmos::OnOverlapBegin);
