@@ -56,6 +56,8 @@ AThe_ShooterCharacter::AThe_ShooterCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	//TimerDuration = 5.0f;
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -562,6 +564,19 @@ void AThe_ShooterCharacter::AimStop(const FInputActionValue& Value)
 	
 }
 
+//void AThe_ShooterCharacter::Lock(const FInputActionValue& Value)
+//{
+//	if (!bWeaponEquip && !bFightingStance)
+//	{
+//		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+//		AnimInstance->Montage_Play(FightStartMontage);
+//
+//		FOnMontageEnded EndDelegate;
+//		EndDelegate.BindUObject(this, &AThe_ShooterCharacter::OnStartMontageEnded);
+//		AnimInstance->Montage_SetEndDelegate(EndDelegate, FightStartMontage);
+//	}
+//}
+
 void AThe_ShooterCharacter::Firing(const FInputActionValue& Value)
 {
 	if (bWeaponEquip)
@@ -633,7 +648,79 @@ void AThe_ShooterCharacter::Firing(const FInputActionValue& Value)
 			}
 		}
 	}
+	//if (!bWeaponEquip && !bFightingStance)
+	//{
+	//	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	//	AnimInstance->Montage_Play(FightHookMontage);
+
+	//	FOnMontageEnded EndDelegate;
+	//	EndDelegate.BindUObject(this, &AThe_ShooterCharacter::OnHookMontageEnded);
+	//	AnimInstance->Montage_SetEndDelegate(EndDelegate, FightHookMontage);
+	//}
+	//if (!bWeaponEquip && bFightingStance)
+	//{
+	//	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	//	AnimInstance->Montage_Play(FightPunchMontage);
+
+	//	// Clear any existing timer
+	//	GetWorld()->GetTimerManager().ClearTimer(ResetTimerHandle);
+
+	//	// Start a new timer
+	//	GetWorld()->GetTimerManager().SetTimer(
+	//		ResetTimerHandle,
+	//		this,
+	//		&AThe_ShooterCharacter::OnTimerExpire,
+	//		TimerDuration,
+	//		false
+	//	);
+	//}
 }
+
+//void AThe_ShooterCharacter::OnHookMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+//{
+//	bFightingStance = true;
+//
+//	GetWorld()->GetTimerManager().ClearTimer(ResetTimerHandle);
+//
+//	GetWorld()->GetTimerManager().SetTimer(
+//		ResetTimerHandle,
+//		this,
+//		&AThe_ShooterCharacter::OnTimerExpire,
+//		TimerDuration,
+//		false
+//	);
+//
+//}
+//
+//void AThe_ShooterCharacter::OnStartMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+//{
+//	bFightingStance = true;
+//
+//	GetWorld()->GetTimerManager().ClearTimer(ResetTimerHandle);
+//
+//	GetWorld()->GetTimerManager().SetTimer(
+//		ResetTimerHandle,
+//		this,
+//		&AThe_ShooterCharacter::OnTimerExpire,
+//		TimerDuration,
+//		false
+//	);
+//}
+//
+//void AThe_ShooterCharacter::OnStopMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+//{
+//	bFightingStance = false;
+//}
+//
+//void AThe_ShooterCharacter::OnTimerExpire()
+//{
+//	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+//	AnimInstance->Montage_Play(FightEndMontage);
+//
+//	FOnMontageEnded EndDelegate;
+//	EndDelegate.BindUObject(this, &AThe_ShooterCharacter::OnStopMontageEnded);
+//	AnimInstance->Montage_SetEndDelegate(EndDelegate, FightEndMontage);
+//}
 
 void AThe_ShooterCharacter::Reload(const FInputActionValue& Value)
 {

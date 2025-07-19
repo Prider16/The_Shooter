@@ -79,6 +79,10 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* FireAction;
 
+	/** Lock Input Action */
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//UInputAction* LockAction;
+
 	/** Reload Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ReloadAction;
@@ -108,6 +112,9 @@ class AThe_ShooterCharacter : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
 	bool bRifleEquip;
+
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Variables, meta = (AllowPrivateAccess = "true"))
+	bool bFightingStance;*/
 
 	/* Pistol Montage */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
@@ -196,6 +203,27 @@ class AThe_ShooterCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health, meta = (AllowPrivateAccess = "true"))
 	int32 HealthBandageCount;
 
+	/* Fighting animation Montages */
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	//UAnimMontage* FightHookMontage;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	//UAnimMontage* FightStartMontage;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	//UAnimMontage* FightEndMontage;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Animation, meta = (AllowPrivateAccess = "true"))
+	//UAnimMontage* FightPunchMontage;
+
+	///* Timmer */
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer", meta = (AllowPrivateAccess = "true"))
+	//float TimerDuration;
+
+	//void OnTimerExpire();
+
+	//FTimerHandle ResetTimerHandle;
+
 public:
 	AThe_ShooterCharacter();
 
@@ -261,6 +289,9 @@ protected:
 	
 	/** Called for Fire input */
 	void Firing(const FInputActionValue& Value);
+
+	/** Called for Lock input */
+	//void Lock(const FInputActionValue& Value);
 
 	/** Called for Reload input */
 	void Reload(const FInputActionValue& Value);
@@ -335,6 +366,16 @@ private:
 
 	UFUNCTION()
 	void OnHealingNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPayload);
+
+	//// Fighting Montages End Functions
+	//UFUNCTION()
+	//void OnHookMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	//UFUNCTION()
+	//void OnStartMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	//UFUNCTION()
+	//void OnStopMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 public:
 
