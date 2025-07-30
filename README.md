@@ -33,16 +33,6 @@ https://www.linkedin.com/feed/update/urn:li:activity:7347868805823397888/
 
 [Rifle.webm](https://github.com/user-attachments/assets/bf8766ef-1749-461c-ad64-97cf5808af36)
 
-### Shooting Mechanism
-
-**Pistol Shoot**
-
-
-
-**Rifle Shoot**
-
-
-
 ---
 
 ## 🛠️ Technologies Used
