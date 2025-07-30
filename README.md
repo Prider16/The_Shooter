@@ -24,6 +24,10 @@ And much more feature as the development continues.
 
 ## 🎥 Gameplay Preview
 
+### Full Character Locomotion
+
+https://www.linkedin.com/feed/update/urn:li:activity:7347868805823397888/
+
 ### Character movements
 
 **Unarmed Locomotion**
