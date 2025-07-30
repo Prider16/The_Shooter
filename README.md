@@ -7,18 +7,9 @@
 ## 🔥 Features
 
 - **Gameplay**: Third-Person gameplay.
-- **Animation**: Setup Character Blueprints Through Blueprints.
+- **Animation**: Setup Character Animations Through Blueprints.
 - **C++-Driven**: Character and Weapon Mechanism are entierly buil in C++.
-
----
-
-## 🛠️ Future Updates
-This Project is under Development and I will add These Features one by one.
-- **HUD**: Real-time updating HUD.
-- **Enemy AI**: I will add enemy AI through behavior tree.
-- **Level**: Will Build a Level Where you need to rescue hostages from enemies.
-
-And much more feature as the development continues.
+-  **HUD**: Real-time updating HUD.
 
 ---
 
